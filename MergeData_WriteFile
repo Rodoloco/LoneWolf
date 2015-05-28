@@ -1,0 +1,23 @@
+import csv
+from collections import default_dict
+test_dd = defaultdict(list)
+with open(first_file, 'rb') as file_one:
+    csv_reader = csv.reader(file_one, delimiter='\t')
+    for row in csv_reader:
+        test_dd[row[1]].append(row[0])
+file_one.close()
+
+#Read the second file and write to the output file simultaneously.
+
+with open(sec_file, 'rb') as file_two, open(op_file, 'w') as out_file:
+    csv_reader = csv.reader(file_two, delimiter='\t')
+    csv_writer = csv.writer(out_file, delimiter='\t')
+    for row in csv_reader:
+        values = test_dd.get(row[0], [])
+        op_list = []
+        op_list.append(row[0])
+        op_list.extend(values)
+        values.extend(row[1:])
+        csv_writer.writerow(op_list)
+file_two.close()
+out_file.close()
